@@ -2,7 +2,7 @@ function ChatHeader() {
   return (
     <header className="chat-header">
       <div className="sherlock-avatar">
-        <img src="/sherlock-logo.svg" alt="placeholder" />
+        <img src="/sherlock-logo.svg" alt="Logo of AI sherlock" />
       </div>
 
       <div>

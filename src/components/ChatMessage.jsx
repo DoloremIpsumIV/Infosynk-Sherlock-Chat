@@ -9,7 +9,7 @@ function ChatMessage({ message }) {
     >
       {!isUser && (
         <div className="avatar">
-          <img src="/sherlock-logo.svg" alt="placeholder" />
+          <img src="/sherlock-logo.svg" alt="Logo of AI sherlock" />
         </div>
       )}
 
