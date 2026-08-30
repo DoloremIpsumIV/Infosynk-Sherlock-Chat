@@ -89,12 +89,30 @@ body {
 
 .message-row {
   display: flex;
+  align-items: flex-start;
   gap: 11px;
+  margin-bottom: 24px;
+}
+
+.message-row--user {
+  justify-content: flex-end;
 }
 
 .message {
-  max-width: 70%;
+  max-width: 72%;
   line-height: 1.6;
+}
+
+.message--user {
+  padding: 10px 15px;
+  border-radius: 16px 16px 4px 16px;
+
+  color: white;
+  background: #303640;
+}
+
+.message--assistant {
+  padding-top: 3px;
 }
 
 .message-author {

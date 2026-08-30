@@ -12,7 +12,7 @@ function App() {
   return (
     <div className="app">
       <main className="chat">
-        <ChatHeader message={welcomeMessage}/>
+        <ChatHeader message={welcomeMessage} />
 
         <div className="chat-messages">
           <ChatMessage message={welcomeMessage} />
