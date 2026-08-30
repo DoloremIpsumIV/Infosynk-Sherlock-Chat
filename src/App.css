@@ -154,3 +154,13 @@ body {
   background: var(--gold);
   cursor: pointer;
 }
+
+.thinking {
+  color: var(--muted);
+  font-size: 14px;
+  padding-left: 46px;
+}
+
+.thinking-dots {
+  display: inline-block;
+}

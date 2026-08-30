@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function ChatInput({ onSendMessage }) {
+function ChatInput({ onSendMessage, disabled }) {
   const [input, setInput] = useState("");
 
   const handleSubmit = (event) => {
@@ -19,9 +19,13 @@ function ChatInput({ onSendMessage }) {
         value={input}
         onChange={(event) => setInput(event.target.value)}
         placeholder="Ask Sherlock about the case..."
+        disabled={disabled}
+        aria-label="Message Sherlock"
       />
 
-      <button type="submit">Send</button>
+      <button type="submit" disabled={!input.trim() || disabled}>
+        Send
+      </button>
     </form>
   );
 }

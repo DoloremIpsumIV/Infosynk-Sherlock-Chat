@@ -15,24 +15,32 @@ function App() {
     },
   ]);
 
+  const [isThinking, setIsThinking] = useState(false);
+
   const handleSendMessage = (text) => {
+    if (!text.trim() || isThinking) return;
+
     const userMessage = {
       id: crypto.randomUUID(),
       role: "user",
       content: text,
     };
 
-    const sherlockMessage = {
-      id: crypto.randomUUID(),
-      role: "assistant",
-      content: getSherlockResponse(text),
-    };
+    setMessages((currentMessages) => [...currentMessages, userMessage]);
 
-    setMessages((currentMessages) => [
-      ...currentMessages,
-      userMessage,
-      sherlockMessage,
-    ]);
+    setIsThinking(true);
+
+    window.setTimeout(() => {
+      const sherlockMessage = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content: getSherlockResponse(text),
+      };
+
+      setMessages((currentMessages) => [...currentMessages, sherlockMessage]);
+
+      setIsThinking(false);
+    }, 850);
   };
 
   return (
@@ -40,9 +48,9 @@ function App() {
       <main className="chat">
         <ChatHeader />
 
-        <ChatMessages messages={messages} />
+        <ChatMessages messages={messages} isThinking={isThinking} />
 
-        <ChatInput onSendMessage={handleSendMessage} />
+        <ChatInput onSendMessage={handleSendMessage} disabled={isThinking} />
       </main>
     </div>
   );
