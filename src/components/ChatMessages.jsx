@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import ChatMessage from "./ChatMessage";
 
-function ChatMessages({ messages, isThinking, onTypingComplete }) {
+function ChatMessages({ messages, isThinking, onCharacter, onTypingComplete }) {
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -16,6 +16,7 @@ function ChatMessages({ messages, isThinking, onTypingComplete }) {
         <ChatMessage
           key={message.id}
           message={message}
+          onCharacter={onCharacter}
           onTypingComplete={onTypingComplete}
         />
       ))}

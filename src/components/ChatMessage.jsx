@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import TypewriterText from "./TypewriterText";
 
-function ChatMessage({ message, onTypingComplete }) {
+function ChatMessage({ message, onCharacter, onTypingComplete }) {
   const isUser = message.role === "user";
   const handleTypingComplete = useCallback(() => {
     onTypingComplete?.(message.id);
@@ -27,6 +27,7 @@ function ChatMessage({ message, onTypingComplete }) {
         {message.role === "assistant" && message.animate ? (
           <TypewriterText
             text={message.content}
+            onCharacter={onCharacter}
             onComplete={handleTypingComplete}
           />
         ) : (

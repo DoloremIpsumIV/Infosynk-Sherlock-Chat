@@ -164,3 +164,42 @@ body {
 .thinking-dots {
   display: inline-block;
 }
+
+.chat-header__title {
+  min-width: 0;
+}
+
+.audio-toggle {
+  margin-left: auto;
+  padding: 8px 11px;
+  flex-shrink: 0;
+
+  color: var(--muted);
+  background: #242830;
+  border: 1px solid #3a404b;
+  border-radius: 8px;
+
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.audio-toggle:hover {
+  color: #f5f2ea;
+  border-color: var(--gold);
+}
+
+.audio-toggle:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+@media (max-width: 520px) {
+  .chat-header {
+    padding-inline: 14px;
+  }
+
+  .audio-toggle {
+    padding-inline: 9px;
+  }
+}

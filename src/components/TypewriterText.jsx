@@ -16,7 +16,7 @@ function getCharacterDelay(character) {
   return 30 + Math.floor(Math.random() * 24);
 }
 
-function TypewriterText({ text, onComplete }) {
+function TypewriterText({ text, onCharacter, onComplete }) {
   const [visibleText, setVisibleText] = useState("");
 
   useEffect(() => {
@@ -31,18 +31,20 @@ function TypewriterText({ text, onComplete }) {
     let timeoutId;
 
     const typeNextCharacter = () => {
+      const character = text[index];
       index += 1;
+
       setVisibleText(text.slice(0, index));
+      onCharacter?.(character);
 
       if (index >= text.length) {
         onComplete?.();
         return;
       }
 
-      const typedCharacter = text[index - 1];
       timeoutId = window.setTimeout(
         typeNextCharacter,
-        getCharacterDelay(typedCharacter),
+        getCharacterDelay(character),
       );
     };
 
@@ -54,7 +56,7 @@ function TypewriterText({ text, onComplete }) {
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [text, onComplete]);
+  }, [text, onCharacter, onComplete]);
 
   return <p>{visibleText}</p>;
 }
