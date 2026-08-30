@@ -38,7 +38,8 @@ function App() {
 
   const getAudioContext = useCallback(() => {
     if (!audioContextRef.current) {
-      const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      const AudioContextClass =
+        window.AudioContext || window.webkitAudioContext;
 
       if (!AudioContextClass) {
         return null;
@@ -128,12 +129,14 @@ function App() {
   );
 
   const handleSendMessage = (text) => {
-    if (!text.trim() || isBusy) return;
+    const trimmedText = text.trim();
+
+    if (!trimmedText || isBusy) return;
 
     const userMessage = {
       id: crypto.randomUUID(),
       role: "user",
-      content: text,
+      content: trimmedText,
     };
 
     setMessages((currentMessages) => [...currentMessages, userMessage]);
@@ -141,10 +144,11 @@ function App() {
 
     window.setTimeout(() => {
       const id = crypto.randomUUID();
+
       const sherlockMessage = {
         id,
         role: "assistant",
-        content: getSherlockResponse(text),
+        content: getSherlockResponse(trimmedText),
         animate: true,
       };
 
@@ -154,37 +158,38 @@ function App() {
     }, 850);
   };
 
-  const handleTypingComplete = useCallback((messageId) => {
-    setActiveTypingMessageId((currentId) =>
-      currentId === messageId ? null : currentId,
-    );
+  const handleTypingComplete = useCallback(() => {
+    setActiveTypingMessageId(null);
   }, []);
 
-  const handleCharacter = useCallback(
-    (character) => {
-      if (!audioEnabledRef.current || !audioUnlockedRef.current) {
-        return;
-      }
+  const handleCharacter = useCallback(() => {
+    if (!audioEnabledRef.current || !audioUnlockedRef.current) {
+      return;
+    }
 
-      const context = audioContextRef.current;
-      const buffer = audioBufferRef.current;
+    const context = audioContextRef.current;
+    const buffer = audioBufferRef.current;
 
-      if (!context || !buffer) {
-        void preloadTypewriterSound();
-        return;
-      }
+    if (!context || !buffer) {
+      void preloadTypewriterSound();
+      return;
+    }
 
-      if (context.state === "suspended") {
-        void context.resume();
-      }
+    if (context.state !== "running") {
+      return;
+    }
 
-      const source = context.createBufferSource();
-      source.buffer = buffer;
-      source.connect(context.destination);
-      source.start();
-    },
-    [preloadTypewriterSound],
-  );
+    const source = context.createBufferSource();
+    const gain = context.createGain();
+
+    source.buffer = buffer;
+    source.playbackRate.value = 0.94 + Math.random() * 0.12;
+    gain.gain.value = 0.18;
+
+    source.connect(gain);
+    gain.connect(context.destination);
+    source.start();
+  }, [preloadTypewriterSound]);
 
   const handleToggleAudio = useCallback(() => {
     setAudioEnabled((currentValue) => {
@@ -205,7 +210,8 @@ function App() {
         <ChatMessages
           messages={messages}
           isThinking={isThinking}
-          onCharacter={handleCharacter}
+          activeTypingMessageId={activeTypingMessageId}
+          onTypewriterCharacter={handleCharacter}
           onTypingComplete={handleTypingComplete}
         />
 

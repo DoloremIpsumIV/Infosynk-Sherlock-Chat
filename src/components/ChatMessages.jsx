@@ -1,7 +1,13 @@
 import { useEffect, useRef } from "react";
 import ChatMessage from "./ChatMessage";
 
-function ChatMessages({ messages, isThinking, onCharacter, onTypingComplete }) {
+function ChatMessages({
+  messages,
+  isThinking,
+  activeTypingMessageId,
+  onTypewriterCharacter,
+  onTypingComplete,
+}) {
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -11,20 +17,25 @@ function ChatMessages({ messages, isThinking, onCharacter, onTypingComplete }) {
   }, [messages, isThinking]);
 
   return (
-    <div className="chat-messages">
+    <div className="chat-messages" aria-live="polite">
       {messages.map((message) => (
         <ChatMessage
           key={message.id}
           message={message}
-          onCharacter={onCharacter}
+          onTypewriterCharacter={onTypewriterCharacter}
           onTypingComplete={onTypingComplete}
+          isActiveTyping={message.id === activeTypingMessageId}
         />
       ))}
 
       {isThinking && (
-        <div className="thinking">
-          Sherlock is investigating
-          <span className="thinking-dots">...</span>
+        <div className="typing-indicator">
+          <span className="typing-indicator__dots">
+            <i />
+            <i />
+            <i />
+          </span>
+          Sherlock is investigating...
         </div>
       )}
 

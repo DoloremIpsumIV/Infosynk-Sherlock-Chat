@@ -1,25 +1,43 @@
 function ChatHeader({ audioEnabled, onToggleAudio }) {
   return (
-    <header className="chat-header">
-      <div className="sherlock-avatar">
-        <img src="/sherlock-logo.svg" alt="Logo of AI sherlock" />
+    <>
+      <div className="ai-warning" role="note">
+        <span>
+          <strong>AI can be wrong.</strong> Sherlock may produce inaccurate or
+          misleading information. Always fact-check important claims with
+          reliable sources.
+        </span>
       </div>
 
-      <div className="chat-header__title">
-        <h1>Sherlock Chat</h1>
-        <p>AI Detective Assistant</p>
-      </div>
+      <header className="chat-header">
+        <div className="sherlock-avatar">
+          <img src="/sherlock-logo.svg" alt="Logo of AI sherlock" />
+        </div>
 
-      <button
-        className="audio-toggle"
-        onClick={onToggleAudio}
-        type="button"
-        aria-pressed={audioEnabled}
-        aria-label={audioEnabled ? "Mute typewriter sound" : "Enable typewriter sound"}
-      >
-        {audioEnabled ? "Sound on" : "Sound off"}
-      </button>
-    </header>
+        <div className="chat-header__identity">
+          <h1>Sherlock Chat</h1>
+          <p>
+            <span className="status-dot" />
+            AI Detective Assistant
+          </p>
+        </div>
+
+        <button
+          className={`audio-toggle ${audioEnabled ? "is-on" : "is-off"}`}
+          type="button"
+          onClick={onToggleAudio}
+          aria-pressed={audioEnabled}
+          aria-label={
+            audioEnabled ? "Mute typewriter sounds" : "Enable typewriter sounds"
+          }
+          title={
+            audioEnabled ? "Mute typewriter sounds" : "Enable typewriter sounds"
+          }
+        >
+          <span>{audioEnabled ? "Sound on" : "Sound off"}</span>
+        </button>
+      </header>
+    </>
   );
 }
 

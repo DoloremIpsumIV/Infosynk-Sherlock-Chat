@@ -21,7 +21,102 @@ body {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  background: #101216;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(209, 169, 84, 0.05),
+      transparent 34%
+    ),
+    #101216;
+}
+
+.ai-warning {
+  padding: 9px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #d4d8df;
+  background: #20232a;
+  border-bottom: 1px solid var(--border);
+  font-size: 12.5px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.ai-warning strong {
+  color: #f0d58e;
+  font-weight: 700;
+}
+
+.typewriter-text {
+  white-space: pre-wrap;
+}
+
+.typewriter-cursor {
+  width: 1px;
+  height: 1.05em;
+  margin-left: 2px;
+  display: inline-block;
+  vertical-align: -0.12em;
+  background: var(--gold-soft);
+  animation: cursor-blink 760ms steps(1, end) infinite;
+}
+
+@keyframes cursor-blink {
+  0%,
+  48% {
+    opacity: 1;
+  }
+
+  49%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.typing-indicator {
+  margin: -3px 0 22px 45px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #939ba8;
+  font-size: 13px;
+  font-style: italic;
+}
+
+.typing-indicator__dots {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.typing-indicator__dots i {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #a3aab5;
+  animation: thinking-dot 1s infinite ease-in-out;
+}
+
+.typing-indicator__dots i:nth-child(2) {
+  animation-delay: 120ms;
+}
+
+.typing-indicator__dots i:nth-child(3) {
+  animation-delay: 240ms;
+}
+
+@keyframes thinking-dot {
+  0%,
+  70%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+
+  35% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
 }
 
 .chat {
