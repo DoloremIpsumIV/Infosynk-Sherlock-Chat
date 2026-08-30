@@ -28,6 +28,16 @@ function App() {
     }
   });
 
+  useEffect(() => {
+    try {
+      localStorage.setItem(AUDIO_STORAGE_KEY, String(audioEnabled));
+    } catch {
+      // Ignore storage errors
+    }
+  }, [audioEnabled]);
+
+  // Web Audio is kept outside React because these objects-
+  // do not affect rendering and are reused between keystrokes.
   const audioEnabledRef = useRef(audioEnabled);
   const audioContextRef = useRef(null);
   const audioBufferRef = useRef(null);
@@ -86,47 +96,43 @@ function App() {
 
     return audioLoadPromiseRef.current;
   }, [getAudioContext]);
-
+  // Load and decode the sound on page load. Browsers may keep playback suspended-
+  // until the first user interaction, but the sound itself will be ready.
   useEffect(() => {
-    try {
-      localStorage.setItem(AUDIO_STORAGE_KEY, String(audioEnabled));
-    } catch {
-      // The preference is optional if storage is unavailable.
-    }
-  }, [audioEnabled]);
-
-  useEffect(() => {
-    const unlockAudio = () => {
-      audioUnlockedRef.current = true;
+    const unlockAudio = async () => {
       const context = getAudioContext();
 
-      if (context?.state === "suspended") {
-        void context.resume();
+      if (!context) {
+        return;
       }
 
-      void preloadTypewriterSound();
+      if (context.state === "suspended") {
+        try {
+          await context.resume();
+        } catch {
+          return;
+        }
+      }
 
-      window.removeEventListener("pointerdown", unlockAudio);
-      window.removeEventListener("keydown", unlockAudio);
+      // Only consider audio unlocked once it really is running.
+      if (context.state === "running") {
+        audioUnlockedRef.current = true;
+
+        void preloadTypewriterSound();
+
+        window.removeEventListener("click", unlockAudio);
+        window.removeEventListener("keydown", unlockAudio);
+      }
     };
 
-    window.addEventListener("pointerdown", unlockAudio);
+    window.addEventListener("click", unlockAudio);
     window.addEventListener("keydown", unlockAudio);
 
     return () => {
-      window.removeEventListener("pointerdown", unlockAudio);
+      window.removeEventListener("click", unlockAudio);
       window.removeEventListener("keydown", unlockAudio);
     };
   }, [getAudioContext, preloadTypewriterSound]);
-
-  useEffect(
-    () => () => {
-      if (audioContextRef.current) {
-        void audioContextRef.current.close();
-      }
-    },
-    [],
-  );
 
   const handleSendMessage = (text) => {
     const trimmedText = text.trim();

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 const BASE_DELAY = 34;
 
-
+// Punctuation gets a slightly longer pause so the response feels less robotic.
 function getCharacterDelay(character) {
   if (/[.!?]/.test(character)) return 190;
   if (/[,;:]/.test(character)) return 105;
@@ -77,7 +77,7 @@ function TypewriterText({ text, onCharacter, onComplete }) {
     <span className="typewriter-text">
       {visibleText}
       {visibleText.length < text.length && (
-        <span className="typewriter-cursor" />
+        <span className="typewriter-cursor" aria-hidden="true" />
       )}
     </span>
   );

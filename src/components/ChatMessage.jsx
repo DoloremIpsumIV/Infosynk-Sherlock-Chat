@@ -7,22 +7,22 @@ function ChatMessage({
   isActiveTyping,
 }) {
   const isUser = message.role === "user";
+  const rowClass = `message-row ${
+    isUser ? "message-row--user" : "message-row--assistant"
+  }`;
+  const messageClass = `message ${
+    isUser ? "message--user" : "message--assistant"
+  }`;
 
   return (
-    <div
-      className={`message-row ${
-        isUser ? "message-row--user" : "message-row--assistant"
-      }`}
-    >
+    <div className={rowClass}>
       {!isUser && (
-        <div className="avatar">
-          <img src="/sherlock-logo.svg" alt="Logo of AI sherlock" />
+        <div className="avatar" aria-hidden="true">
+          <img alt="" src="/sherlock-logo.svg" />
         </div>
       )}
 
-      <div
-        className={`message ${isUser ? "message--user" : "message--assistant"}`}
-      >
+      <div className={messageClass}>
         {!isUser && <span className="message-author">Sherlock</span>}
 
         <p>

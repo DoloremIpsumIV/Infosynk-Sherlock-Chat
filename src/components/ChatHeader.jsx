@@ -10,14 +10,14 @@ function ChatHeader({ audioEnabled, onToggleAudio }) {
       </div>
 
       <header className="chat-header">
-        <div className="sherlock-avatar">
-          <img src="/sherlock-logo.svg" alt="Logo of AI sherlock" />
+        <div className="sherlock-avatar" aria-hidden="true">
+          <img src="/sherlock-logo.svg" alt="" />
         </div>
 
         <div className="chat-header__identity">
           <h1>Sherlock Chat</h1>
           <p>
-            <span className="status-dot" />
+            <span className="status-dot" aria-hidden="true" />
             AI Detective Assistant
           </p>
         </div>

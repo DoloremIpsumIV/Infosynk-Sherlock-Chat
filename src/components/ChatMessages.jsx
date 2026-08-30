@@ -11,26 +11,28 @@ function ChatMessages({
   const bottomRef = useRef(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({
-      behavior: "smooth",
-    });
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isThinking]);
 
   return (
     <div className="chat-messages" aria-live="polite">
-      {messages.map((message) => (
-        <ChatMessage
-          key={message.id}
-          message={message}
-          onTypewriterCharacter={onTypewriterCharacter}
-          onTypingComplete={onTypingComplete}
-          isActiveTyping={message.id === activeTypingMessageId}
-        />
-      ))}
+      {messages.map((message) => {
+        const isCurrentTypingMessage = message.id === activeTypingMessageId;
+
+        return (
+          <ChatMessage
+            key={message.id}
+            message={message}
+            isActiveTyping={isCurrentTypingMessage}
+            onTypewriterCharacter={onTypewriterCharacter}
+            onTypingComplete={onTypingComplete}
+          />
+        );
+      })}
 
       {isThinking && (
         <div className="typing-indicator">
-          <span className="typing-indicator__dots">
+          <span className="typing-indicator__dots" aria-hidden="true">
             <i />
             <i />
             <i />
