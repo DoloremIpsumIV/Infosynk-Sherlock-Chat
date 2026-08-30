@@ -1,31 +1,29 @@
+import { useState } from "react";
 import ChatHeader from "./components/ChatHeader";
 import ChatMessages from "./components/ChatMessages";
 import ChatInput from "./components/ChatInput";
 import "./App.css";
 
-// Simulating fake convo and showing it works fine
-const messages = [
-  {
-    id: 1,
-    role: "assistant",
-    content:
-      "Good evening, Detective. What would you like me to investigate?",
-  },
-  {
-    id: 2,
-    role: "user",
-    content:
-      "I want to know more about the suspect?",
-  },
-  {
-    id: 3,
-    role: "assistant",
-    content:
-      "Then we should look at their alibi.",
-  },
-];
-
 function App() {
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      role: "assistant",
+      content:
+        "Good evening, Detective. What would you like me to investigate?",
+    },
+  ]);
+
+  const handleSendMessage = (text) => {
+    const newMessage = {
+      id: Date.now(),
+      role: "user",
+      content: text,
+    };
+
+    setMessages((currentMessages) => [...currentMessages, newMessage]);
+  };
+
   return (
     <div className="app">
       <main className="chat">
@@ -33,7 +31,7 @@ function App() {
 
         <ChatMessages messages={messages} />
 
-        <ChatInput />
+        <ChatInput onSendMessage={handleSendMessage} />
       </main>
     </div>
   );
