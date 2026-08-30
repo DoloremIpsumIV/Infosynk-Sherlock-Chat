@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import ChatInput from "./components/ChatInput";
 import { getSherlockResponse } from "./data/responses";
 import ChatHeader from "./components/ChatHeader";
@@ -6,19 +6,22 @@ import ChatMessages from "./components/ChatMessages";
 import "./App.css";
 
 function App() {
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState(() => [
     {
-      id: 1,
+      id: crypto.randomUUID(),
       role: "assistant",
       content:
         "Good evening, Detective. What would you like me to investigate?",
+      animate: false,
     },
   ]);
-
   const [isThinking, setIsThinking] = useState(false);
+  const [activeTypingMessageId, setActiveTypingMessageId] = useState(null);
+
+  const isBusy = isThinking || activeTypingMessageId !== null;
 
   const handleSendMessage = (text) => {
-    if (!text.trim() || isThinking) return;
+    if (!text.trim() || isBusy) return;
 
     const userMessage = {
       id: crypto.randomUUID(),
@@ -27,30 +30,41 @@ function App() {
     };
 
     setMessages((currentMessages) => [...currentMessages, userMessage]);
-
     setIsThinking(true);
 
     window.setTimeout(() => {
+      const id = crypto.randomUUID();
       const sherlockMessage = {
-        id: crypto.randomUUID(),
+        id,
         role: "assistant",
         content: getSherlockResponse(text),
+        animate: true,
       };
 
+      setActiveTypingMessageId(id);
       setMessages((currentMessages) => [...currentMessages, sherlockMessage]);
-
       setIsThinking(false);
     }, 850);
   };
+
+  const handleTypingComplete = useCallback((messageId) => {
+    setActiveTypingMessageId((currentId) =>
+      currentId === messageId ? null : currentId,
+    );
+  }, []);
 
   return (
     <div className="app">
       <main className="chat">
         <ChatHeader />
 
-        <ChatMessages messages={messages} isThinking={isThinking} />
+        <ChatMessages
+          messages={messages}
+          isThinking={isThinking}
+          onTypingComplete={handleTypingComplete}
+        />
 
-        <ChatInput onSendMessage={handleSendMessage} disabled={isThinking} />
+        <ChatInput onSendMessage={handleSendMessage} disabled={isBusy} />
       </main>
     </div>
   );

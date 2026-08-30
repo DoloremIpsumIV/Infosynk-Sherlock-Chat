@@ -1,5 +1,11 @@
-function ChatMessage({ message }) {
+import { useCallback } from "react";
+import TypewriterText from "./TypewriterText";
+
+function ChatMessage({ message, onTypingComplete }) {
   const isUser = message.role === "user";
+  const handleTypingComplete = useCallback(() => {
+    onTypingComplete?.(message.id);
+  }, [message.id, onTypingComplete]);
 
   return (
     <div
@@ -18,7 +24,14 @@ function ChatMessage({ message }) {
       >
         {!isUser && <span className="message-author">Sherlock</span>}
 
-        <p>{message.content}</p>
+        {message.role === "assistant" && message.animate ? (
+          <TypewriterText
+            text={message.content}
+            onComplete={handleTypingComplete}
+          />
+        ) : (
+          <p>{message.content}</p>
+        )}
       </div>
     </div>
   );

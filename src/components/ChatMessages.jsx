@@ -1,7 +1,7 @@
-import ChatMessage from "./ChatMessage";
 import { useEffect, useRef } from "react";
+import ChatMessage from "./ChatMessage";
 
-function ChatMessages({ messages, isThinking }) {
+function ChatMessages({ messages, isThinking, onTypingComplete }) {
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -13,7 +13,11 @@ function ChatMessages({ messages, isThinking }) {
   return (
     <div className="chat-messages">
       {messages.map((message) => (
-        <ChatMessage key={message.id} message={message} />
+        <ChatMessage
+          key={message.id}
+          message={message}
+          onTypingComplete={onTypingComplete}
+        />
       ))}
 
       {isThinking && (
