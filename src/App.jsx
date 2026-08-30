@@ -1,7 +1,8 @@
 import { useState } from "react";
+import ChatInput from "./components/ChatInput";
+import { getSherlockResponse } from "./data/responses";
 import ChatHeader from "./components/ChatHeader";
 import ChatMessages from "./components/ChatMessages";
-import ChatInput from "./components/ChatInput";
 import "./App.css";
 
 function App() {
@@ -15,13 +16,23 @@ function App() {
   ]);
 
   const handleSendMessage = (text) => {
-    const newMessage = {
-      id: Date.now(),
+    const userMessage = {
+      id: crypto.randomUUID(),
       role: "user",
       content: text,
     };
 
-    setMessages((currentMessages) => [...currentMessages, newMessage]);
+    const sherlockMessage = {
+      id: crypto.randomUUID(),
+      role: "assistant",
+      content: getSherlockResponse(text),
+    };
+
+    setMessages((currentMessages) => [
+      ...currentMessages,
+      userMessage,
+      sherlockMessage,
+    ]);
   };
 
   return (
