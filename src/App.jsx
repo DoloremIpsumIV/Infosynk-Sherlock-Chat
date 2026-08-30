@@ -1,22 +1,37 @@
 import ChatHeader from "./components/ChatHeader";
-import ChatMessage from "./components/ChatMessage";
+import ChatMessages from "./components/ChatMessages";
 import ChatInput from "./components/ChatInput";
 import "./App.css";
 
-function App() {
-  const welcomeMessage = {
+// Simulating fake convo and showing it works fine
+const messages = [
+  {
     id: 1,
     role: "assistant",
-    content: "Good evening, Detective. What would you like me to investigate?",
-  };
+    content:
+      "Good evening, Detective. What would you like me to investigate?",
+  },
+  {
+    id: 2,
+    role: "user",
+    content:
+      "I want to know more about the suspect?",
+  },
+  {
+    id: 3,
+    role: "assistant",
+    content:
+      "Then we should look at their alibi.",
+  },
+];
+
+function App() {
   return (
     <div className="app">
       <main className="chat">
-        <ChatHeader message={welcomeMessage} />
+        <ChatHeader />
 
-        <div className="chat-messages">
-          <ChatMessage message={welcomeMessage} />
-        </div>
+        <ChatMessages messages={messages} />
 
         <ChatInput />
       </main>
